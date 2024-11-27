@@ -20,8 +20,8 @@ export const addBook = (req, res) => {
 
   const finished = readPage === pageCount;
   const id = nanoid(16);
-  const createAt = new Date().toISOString();
-  const updateAt = createAt;
+  const insertedAt = new Date().toISOString();
+  const updatedAt = insertedAt;
 
   // Menambahkan book baru
   if (
@@ -43,8 +43,8 @@ export const addBook = (req, res) => {
       readPage,
       finished,
       reading,
-      createAt,
-      updateAt,
+      insertedAt,
+      updatedAt,
     };
     books.push(book);
 
@@ -121,7 +121,9 @@ export const getBookById = (req, res) => {
     return responHandler({
       res: res,
       status: "success",
-      data: book,
+      data: {
+        "book": book
+      },
       code: 200,
     });
   } else {
@@ -155,7 +157,7 @@ export const updateBook = (req, res) => {
           ...updateData,
         };
 
-        updatedBook.updateAt = new Date().toISOString();
+        updatedBook.updatedAt = new Date().toISOString();
         updatedBook.finished = updatedBook.readPage === updateBook.pageCount;
         books[bookIndex] = updatedBook;
 
@@ -170,15 +172,15 @@ export const updateBook = (req, res) => {
           res: res,
           status: "fail",
           message: valueIsValidBook({ name: updateData.name, options: "name" })
-            ? "Gagal menambahkan buku. Mohon isi nama buku"
+            ? "Gagal memperbarui buku. Mohon isi nama buku"
             : valueIsValidBook({
                 readPage: updateData.readPage,
                 pageCount: updateData.pageCount,
                 options: "readPage",
               })
-            ? "Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount"
+            ? "Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount"
             : "",
-          code: 404,
+          code: 400,
         });
       }
     } else {

@@ -178,7 +178,7 @@ export const updateBook = (req, res) => {
               })
             ? "Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount"
             : "",
-          code: 404,
+          code: 400,
         });
       }
     } else {
